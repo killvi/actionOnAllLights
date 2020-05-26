@@ -11,7 +11,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "lint": "tslint --project .",
+    "lint": "tslint --project . --fix",
     "compile": "tsc --noEmit",
     "deploy": "firebase deploy --only functions",
     "firebase": "firebase"
@@ -23,7 +23,7 @@
     "ts-polyfill": "^3.5.3"
   },
   "devDependencies": {
-    "firebase-tools": "^7.3.0",
+    "firebase-tools": "7.3.0",
     "tslint": "^5.17.0",
     "typescript": "^3.5.1"
   }

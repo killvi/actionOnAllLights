@@ -195,8 +195,7 @@ export class HomeApp {
           const opcMessage = stream.read();
           console.debug('opcMessage:', opcMessage);
 
-          const deviceCommand =
-              makeSendCommand(customData.control_protocol, opcMessage);
+          const deviceCommand = makeSendCommand(customData.control_protocol, opcMessage);
           deviceCommand.requestId = executeRequest.requestId;
           deviceCommand.deviceId = device.id;
           deviceCommand.port = customData.port;
@@ -215,8 +214,8 @@ export class HomeApp {
             executeResponse.setErrorState(device.id, e.errorCode);
           }
         }));
-        console.log(
-            `EXECUTE response: ${JSON.stringify(executeResponse, null, 2)}`);
+
+        console.log(executeResponse.build());
         // Return execution response to smarthome infrastructure.
         return executeResponse.build();
       }

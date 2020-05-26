@@ -15,20 +15,19 @@ import 'ts-polyfill/lib/es2019-array';
 
 import {smarthome} from 'actions-on-google';
 import * as functions from 'firebase-functions';
+const admin = require('firebase-admin');
+// Initialize Firebase
+admin.initializeApp();
 
+console.log('ok');
 const controlKinds = ['TCP', 'UDP', 'HTTP'];
 
 const config = functions.config();
-const devices =
-    Object.entries(config).flatMap(([deviceId, deviceConf]: [string, any]) => {
+const devices = Object.entries(config).flatMap(([deviceId, deviceConf]: [string, any]) => {
       const port = parseInt(deviceConf.port || '7890', 10);
       const leds = parseInt(deviceConf.leds || '16', 10);
-      const controlProtocol =
-          controlKinds.includes(deviceConf.control_protocol) ?
-          deviceConf.control_protocol :
-          'TCP';
-      const channels =
-          deviceConf.channel ? deviceConf.channel.split(',') : ['1'];
+      const controlProtocol = controlKinds.includes(deviceConf.control_protocol) ? deviceConf.control_protocol : 'TCP';
+      const channels = deviceConf.channel ? deviceConf.channel.split(',') : ['1'];
       const proxy = channels.length > 1 ? deviceId : undefined;
       return channels.map((c: string) => ({
                             id: proxy ? `${deviceId}-${c}` : deviceId,
@@ -44,7 +43,7 @@ const devices =
 const app = smarthome({debug: true});
 
 app.onSync((body, headers) => {
-  return {
+  const response = {
     requestId: body.requestId,
     payload: {
       agentUserId: 'placeholder-user-id',
@@ -77,6 +76,8 @@ app.onSync((body, headers) => {
                            })),
     },
   };
+  console.log('response');
+  return response;
 });
 app.onQuery((body, headers) => {
   return {
@@ -89,10 +90,8 @@ app.onQuery((body, headers) => {
 exports.smarthome = functions.https.onRequest(app);
 
 exports.authorize = functions.https.onRequest((req, res) => {
-  res.status(200).send(`<a href="${
-      decodeURIComponent(
-          req.query.redirect_uri)}?code=placeholder-auth-code&state=${
-      req.query.state}">Complete Account Linking</a>`);
+  console.log(req);
+  res.status(200).send(`<a href="${decodeURIComponent(req.query.redirect_uri)}?code=placeholder-auth-code&state=${req.query.state}">Complete Account Linking</a>`);
 });
 
 exports.token = functions.https.onRequest((req, res) => {
