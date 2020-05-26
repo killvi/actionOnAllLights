@@ -216,6 +216,7 @@ export class HomeApp {
         }));
 
         console.log(executeResponse.build());
+        console.log(JSON.stringify(executeResponse.build(), null, 2));
         // Return execution response to smarthome infrastructure.
         return executeResponse.build();
       }
