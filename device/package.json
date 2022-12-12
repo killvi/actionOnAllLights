@@ -15,7 +15,7 @@
   "dependencies": {
     "cbor": "^4.1.5",
     "chalk": "^2.4.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "multicast-dns-service-types": "^1.1.0",
     "bonjour": "^3.5.0",
     "node-ssdp": "^4.0.0",
